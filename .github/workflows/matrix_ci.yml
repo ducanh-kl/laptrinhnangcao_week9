@@ -1,0 +1,28 @@
+name: Matrix Cross-Platform Testing
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-matrix:
+    # Chien luoc Matrix de chay tren nhieu he dieu hanh
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build and Test on ${{ matrix.os }}
+      run: mvn clean test
